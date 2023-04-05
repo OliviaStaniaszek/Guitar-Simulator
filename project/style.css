@@ -1,0 +1,56 @@
+*{
+    font-family: 'Quicksand', sans-serif;
+  }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #382c1e;
+      width: 1070px;
+    }
+    
+    li {
+      float: left;
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      height: 14px;
+      text-decoration: none;
+      border-right: silver 2pt solid;
+      width:1%;
+      overflow: visible;
+    }
+    
+    li:hover {
+      background-color: #111;
+    }
+
+    .marker li{
+      background-color: blanchedalmond;
+      border-radius: 5px;
+    }
+
+    hr{
+      border: solid silver;
+      position:absolute;
+      /* top: 35px; */
+      margin: 0;
+      padding: 0;
+      left: 51px;
+      width: 1021px;
+      pointer-events: none;
+      box-shadow: black 5px 8px 5px;
+    }
+
+    .markers{
+      position: absolute;
+      top: 180px;
+    }
+    
+    .strings{
+      position: absolute;
+      top: 69px;
+      
+    }

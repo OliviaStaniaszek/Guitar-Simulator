@@ -6,7 +6,7 @@ let dampening = 0.99; //signal dampening amount
 
 let dist = context.createWaveShaper();
 dist.curve = makeDistortionCurve(30);
-const bandpass = context.createBiquadFilter();
+let bandpass = context.createBiquadFilter();
 let recorder = new Recorder(bandpass);
 
 
@@ -70,7 +70,7 @@ function pluck(frequency){
 
     const biquadFilter = context.createBiquadFilter({type:'lowpass', Q:-3.01});
 
-    //connect scriptprocessornode to biquad
+    //connect scriptprocessornode to biquad 
     // pluck.connect(biquadFilter);
     // biquadFilter.connect(bandpass);
     // pluck.connect(dist);
@@ -90,6 +90,34 @@ function pluck(frequency){
     return bandpass;
 }
 
+
+
+
+
+  // // Define the pluck function
+  // async function pluck(frequency) {
+  //   // Create the AudioWorkletNode
+  //   await context.audioWorklet.addModule('pluckworklet.js');
+  //   const pluckNode = new AudioWorkletNode(context, 'pluck-processor');
+  //   pluckNode.parameters.get('frequency').value = frequency;
+  //   pluckNode.connect(context.destination);
+  
+  //   // Apply bandpass filter
+  //   const bandpass = context.createBiquadFilter();
+  //   bandpass.type = 'bandpass';
+  //   bandpass.frequency.value = frequency;
+  //   bandpass.Q.value = 1;
+  //   pluckNode.connect(bandpass);
+  
+  //   // Disconnect after 2 seconds
+  //   setTimeout(() => {
+  //     pluckNode.disconnect();
+  //     bandpass.disconnect();
+  //   }, 2000);
+  
+  //   return bandpass;
+  // }
+
 function playNote(stringfret){
     const dst = context.destination;
 
@@ -97,6 +125,7 @@ function playNote(stringfret){
     let fret = stringfret[1];
     context.resume();
     pluck(getFrequency(string, fret)).connect(dst);
+    
 }
 
 function getFrequency(string, fret){
@@ -118,7 +147,7 @@ function strum(fret, stringCount = 6, stagger = 5){
     for (let index = 0; index< stringCount; index++){
         if (Number.isFinite(fret[index])){
             setTimeout(() => {
-                pluck(getFrequency(index, fret[index])).connect(dst);
+              bandpass = pluck(getFrequency(index, fret[index]));
             }, stagger * index);
         }
     }
@@ -128,15 +157,7 @@ function playChord(frets){
     context.resume().then(strum(frets));
 }
 
-// function Start() {
-    
-//     recorder.record()
-//   }
-//   function Stop() {
-//     recorder.stop()
-//     Tone.stop()
-//     recorder.exportWAV(blob => audio.src = URL.createObjectURL(blob))
-//   }
+
 
 // recorder = new Recorder(bandpass);
 function stopRecording(){
