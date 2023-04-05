@@ -1,5 +1,5 @@
 // initialises an audioContext
-var recorder
+var recorder;
 var context = new AudioContext;
 var Tone = new OscillatorNode(context, {frequency:820});
 // creates four audio nodes
@@ -53,20 +53,20 @@ Width.oninput = function() { WidthLabel.innerHTML = this.value}
 function playNote(freq) {
   console.log("play");
   context.resume()
-  let now = context.currentTime
-  biquadFilter.frequency.value = freq;
-  NoiseGain.gain.setValueAtTime(0.5, now)
-  NoiseGain.gain.linearRampToValueAtTime(0, now + Width.value/1000)
+  // let now = context.currentTime
+  // biquadFilter.frequency.value = freq;
+  // NoiseGain.gain.setValueAtTime(0.5, now)
+  // NoiseGain.gain.linearRampToValueAtTime(0, now + Width.value/1000)
 }
 
 
 // Recording
-recorder = new Recorder(feedbackGain) 
+recorder = new Recorder(feedbackGain);
 Start.onclick = () => {
-  context.resume()
-  recorder.record()
+  context.resume();
+  recorder.record();
 }
 Stop.onclick = () => {
-  recorder.stop()
-  recorder.exportWAV(blob => document.querySelector("audio").src = URL.createObjectURL(blob) )
+  recorder.stop();
+  recorder.exportWAV(blob => document.querySelector("audio").src = URL.createObjectURL(blob) );
 }

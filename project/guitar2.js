@@ -1,7 +1,29 @@
+// let recorder;
 const context = new AudioContext();
+let output;
 
 let dampening = 0.99; //signal dampening amount
 
+let dist = context.createWaveShaper();
+dist.curve = makeDistortionCurve(30);
+const bandpass = context.createBiquadFilter();
+let recorder = new Recorder(bandpass);
+
+
+// http://stackoverflow.com/a/22313408/1090298
+function makeDistortionCurve( amount ) {
+    var k = typeof amount === 'number' ? amount : 0,
+      n_samples = 44100,
+      curve = new Float32Array(n_samples),
+      deg = Math.PI / 180,
+      i = 0,
+      x;
+    for ( ; i < n_samples; ++i ) {
+      x = i * 2 / n_samples - 1;
+      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+    }
+    return curve;
+  };
 
 function pluck(frequency){
     const pluck = context.createScriptProcessor(4096, 0, 1);
@@ -41,7 +63,7 @@ function pluck(frequency){
     };
 
     //apply bandpass centred on target frequency to remove unwanted noise
-    const bandpass = context.createBiquadFilter();
+    // const bandpass = context.createBiquadFilter();
     bandpass.type = "bandpass";
     bandpass.frequency.value = frequency;
     bandpass.Q.value = 1;
@@ -51,7 +73,10 @@ function pluck(frequency){
     //connect scriptprocessornode to biquad
     // pluck.connect(biquadFilter);
     // biquadFilter.connect(bandpass);
+    // pluck.connect(dist);
+    // dist.connect(bandpass);
     pluck.connect(bandpass);
+    // bandpass.connect(output);
 
     //disconnect 
     setTimeout(() => {
@@ -83,4 +108,45 @@ function getFrequency(string, fret){
 
     return A * Math.pow(2, (fret + offsets[string]) /12);
 }
+
+
+function strum(fret, stringCount = 6, stagger = 5){
+    //reset dampening
+    dampening = 0.99;
+    //connect strings to destination
+    const dst = context.destination;
+    for (let index = 0; index< stringCount; index++){
+        if (Number.isFinite(fret[index])){
+            setTimeout(() => {
+                pluck(getFrequency(index, fret[index])).connect(dst);
+            }, stagger * index);
+        }
+    }
+}
+
+function playChord(frets){
+    context.resume().then(strum(frets));
+}
+
+// function Start() {
+    
+//     recorder.record()
+//   }
+//   function Stop() {
+//     recorder.stop()
+//     Tone.stop()
+//     recorder.exportWAV(blob => audio.src = URL.createObjectURL(blob))
+//   }
+
+// recorder = new Recorder(bandpass);
+function stopRecording(){
+    recorder.stop();
+    recorder.exportWAV(blob => audio.src = URL.createObjectURL(blob))
+}
+function startRecording(){
+  context.resume();
+  recorder.record();
+}
+
+
 
