@@ -1,7 +1,7 @@
 // initialises an audioContext
 var recorder
 var context = new AudioContext;
-var Tone = new OscillatorNode(context, {frequency:800});
+var Tone = new OscillatorNode(context, {frequency:820});
 // creates four audio nodes
 let Noise = new AudioBufferSourceNode(context,{loop:true}), //generates audio from a buffer - random noise continuously looped
     NoiseGain = new GainNode(context,{gain:0}), // controls volume of the noise
@@ -13,7 +13,7 @@ Noise.buffer = context.createBuffer(1,context.sampleRate,context.sampleRate)
 // fills 'Noise' with random noise
 for (i=0;i<context.sampleRate;i++) 
   Noise.buffer.getChannelData(0)[i] = 2*Math.random()-1
-Tone.start()    
+Tone.start()   
 
 // step 4: low pass
 
@@ -25,10 +25,10 @@ const biquadFilter = context.createBiquadFilter({type:'lowpass', Q:-3.01});
 Tone.connect(NoiseGain)
 // Noise.connect(NoiseGain)
 NoiseGain.connect(context.destination)
-NoiseGain.connect(biquadFilter); //connect biquad
-biquadFilter.connect(delay);
-delay.connect(feedbackGain)
-feedbackGain.connect(delay)
+// NoiseGain.connect(biquadFilter); //connect biquad
+// biquadFilter.connect(delay);
+// delay.connect(feedbackGain)
+feedbackGain.connect(NoiseGain)
 feedbackGain.connect(context.destination)
 
 //event listeners - when input of these elements change, the corresponding function is executed
@@ -54,7 +54,7 @@ function playNote(freq) {
   console.log("play");
   context.resume()
   let now = context.currentTime
-  biquadFilter.frequency.value = freqx;
+  biquadFilter.frequency.value = freq;
   NoiseGain.gain.setValueAtTime(0.5, now)
   NoiseGain.gain.linearRampToValueAtTime(0, now + Width.value/1000)
 }

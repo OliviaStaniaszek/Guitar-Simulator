@@ -1,5 +1,5 @@
 <head>
-    <script src="guitar.js"></script>
+    <script src="guitar2.js"></script>
     <style>
         ul {
           list-style-type: none;
@@ -17,7 +17,8 @@
           text-align: center;
           padding: 14px 16px;
           text-decoration: none;
-          border: silver 2pt solid;
+          border-right: silver 2pt solid;
+          width:1%;
         }
         
         li:hover {
@@ -26,13 +27,110 @@
     </style>
 </head>
 <body>
-    <ul>    
-        <li onclick="playNote(82.41)">open</li>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>2</li>
-        <li>4</li>
-        <li>5</li>
-    </ul>
+  <ul>    
+    <li onclick="playNote([5,0])" >e</li>
+    <li onclick="playNote([5,1])" >1</li>
+    <li onclick="playNote([5,2])" >2</li>
+    <li onclick="playNote([5,3])" >3</li>
+    <li onclick="playNote([5,4])" >2</li>
+    <li onclick="playNote([5,5])" >4</li>
+    <li onclick="playNote([5,6])" >5</li>
+    <li onclick="playNote([5,7])" >6</li>
+    <li onclick="playNote([5,8])" >7</li>
+    <li onclick="playNote([5,9])" >8</li>
+    <li onclick="playNote([5,10])">9</li>
+    <li onclick="playNote([5,11])">10</li>
+    <li onclick="playNote([5,12])">11</li>
+    <li onclick="playNote([5,13])">12</li>
+  </ul>
+  <ul>    
+    <li onclick="playNote([4,0])" >B</li>
+    <li onclick="playNote([4,1])" >1</li>
+    <li onclick="playNote([4,2])" >2</li>
+    <li onclick="playNote([4,3])" >3</li>
+    <li onclick="playNote([4,4])" >2</li>
+    <li onclick="playNote([4,5])" >4</li>
+    <li onclick="playNote([4,6])" >5</li>
+    <li onclick="playNote([4,7])" >6</li>
+    <li onclick="playNote([4,8])" >7</li>
+    <li onclick="playNote([4,9])" >8</li>
+    <li onclick="playNote([4,10])">9</li>
+    <li onclick="playNote([4,11])">10</li>
+    <li onclick="playNote([4,12])">11</li>
+    <li onclick="playNote([4,13])">12</li>
+  </ul>
+  <ul>    
+    <li onclick="playNote([3,0])" >G</li>
+    <li onclick="playNote([3,1])" >1</li>
+    <li onclick="playNote([3,2])" >2</li>
+    <li onclick="playNote([3,3])" >3</li>
+    <li onclick="playNote([3,4])" >2</li>
+    <li onclick="playNote([3,5])" >4</li>
+    <li onclick="playNote([3,6])" >5</li>
+    <li onclick="playNote([3,7])" >6</li>
+    <li onclick="playNote([3,8])" >7</li>
+    <li onclick="playNote([3,9])" >8</li>
+    <li onclick="playNote([3,10])">9</li>
+    <li onclick="playNote([3,11])">10</li>
+    <li onclick="playNote([3,12])">11</li>
+    <li onclick="playNote([3,13])">12</li>
+  </ul>
+
+  <ul>    
+    <li onclick="playNote([2,0])" >D</li>
+    <li onclick="playNote([2,1])" >1</li>
+    <li onclick="playNote([2,2])" >2</li>
+    <li onclick="playNote([2,3])" >3</li>
+    <li onclick="playNote([2,4])" >2</li>
+    <li onclick="playNote([2,5])" >4</li>
+    <li onclick="playNote([2,6])" >5</li>
+    <li onclick="playNote([2,7])" >6</li>
+    <li onclick="playNote([2,8])" >7</li>
+    <li onclick="playNote([2,9])" >8</li>
+    <li onclick="playNote([2,10])">9</li>
+    <li onclick="playNote([2,11])">10</li>
+    <li onclick="playNote([2,12])">11</li>
+    <li onclick="playNote([2,13])">12</li>
+  </ul>
+  <ul>    
+    <li onclick="playNote([1,0])" >A</li>
+    <li onclick="playNote([1,1])" >1</li>
+    <li onclick="playNote([1,2])" >2</li>
+    <li onclick="playNote([1,3])" >3</li>
+    <li onclick="playNote([1,4])" >2</li>
+    <li onclick="playNote([1,5])" >4</li>
+    <li onclick="playNote([1,6])" >5</li>
+    <li onclick="playNote([1,7])" >6</li>
+    <li onclick="playNote([1,8])" >7</li>
+    <li onclick="playNote([1,9])" >8</li>
+    <li onclick="playNote([1,10])">9</li>
+    <li onclick="playNote([1,11])">10</li>
+    <li onclick="playNote([1,12])">11</li>
+    <li onclick="playNote([1,13])">12</li>
+  </ul>
+  <ul>    
+      <li onclick="playNote([0,0])" >E</li>
+      <li onclick="playNote([0,1])" >1</li>
+      <li onclick="playNote([0,2])" >2</li>
+      <li onclick="playNote([0,3])" >3</li>
+      <li onclick="playNote([0,4])" >2</li>
+      <li onclick="playNote([0,5])" >4</li>
+      <li onclick="playNote([0,6])" >5</li>
+      <li onclick="playNote([0,7])" >6</li>
+      <li onclick="playNote([0,8])" >7</li>
+      <li onclick="playNote([0,9])" >8</li>
+      <li onclick="playNote([0,10])">9</li>
+      <li onclick="playNote([0,11])">10</li>
+      <li onclick="playNote([0,12])">11</li>
+      <li onclick="playNote([0,13])">12</li>
+  </ul>
+    
+
+    <div class="chords">
+      <button onclick="playChord([0,2,2,1,0,0])">Play E major</button>
+      <button onclick="playChord([null,0,2,2,2,0])">Play A major</button>
+      <button onclick="playChord([null,2,1,2,0,2])">Play B7</button>
+      <button onclick="mute()">Mute</button>
+    </div>
+
 </body>
