@@ -1,6 +1,4 @@
-// let recorder;
 const context = new AudioContext();
-let output;
 
 let dampening = 0.99; //signal dampening amount
 
@@ -63,20 +61,17 @@ function pluck(frequency){
     };
 
     //apply bandpass centred on target frequency to remove unwanted noise
-    // const bandpass = context.createBiquadFilter();
+    const bandpass = context.createBiquadFilter();
     bandpass.type = "bandpass";
     bandpass.frequency.value = frequency;
     bandpass.Q.value = 1;
 
-    const biquadFilter = context.createBiquadFilter({type:'lowpass', Q:-3.01});
+    // const biquadFilter = context.createBiquadFilter({type:'lowpass', Q:-3.01});
 
     //connect scriptprocessornode to biquad 
     // pluck.connect(biquadFilter);
     // biquadFilter.connect(bandpass);
-    // pluck.connect(dist);
-    // dist.connect(bandpass);
     pluck.connect(bandpass);
-    // bandpass.connect(output);
 
     //disconnect 
     setTimeout(() => {
@@ -139,18 +134,19 @@ function getFrequency(string, fret){
 }
 
 
-function strum(fret, stringCount = 6, stagger = 5){
-    //reset dampening
-    dampening = 0.99;
-    //connect strings to destination
-    const dst = context.destination;
-    for (let index = 0; index< stringCount; index++){
-        if (Number.isFinite(fret[index])){
-            setTimeout(() => {
-              bandpass = pluck(getFrequency(index, fret[index]));
-            }, stagger * index);
-        }
-    }
+function strum(fret, stringCount = 6, stagger = 25) {
+  // Reset dampening to the natural state
+  dampening = 0.99;
+
+  // Connect our strings to the sink
+  const dst = context.destination;
+  for (let index = 0; index < stringCount; index++) {
+      if (Number.isFinite(fret[index])) {
+          setTimeout(() => {
+              pluck(getFrequency(index, fret[index])).connect(dst);
+          }, stagger * index);
+      }
+  }
 }
 
 function playChord(frets){
