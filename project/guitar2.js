@@ -6,11 +6,45 @@ let dampening = 0.99; //signal dampening amount
 const dst = context.destination;
 let bandpass = context.createBiquadFilter();
 
-// let dist = context.createWaveShaper();
-// dist.curve = makeDistortionCurve(30);
-// let output = new AudioNode();
-// let recorder;
 
+
+// let guitarsong = document.getElementById('song');
+// // var guitarsong = document.querySelector('audio');
+// let source = context.createMediaElementSource();
+
+// // let source = context.createMediaElementSource(guitarsong);
+// let distort = context.createWaveShaper();
+// let gain = context.createGain();
+
+// source.connect(gain);
+// gain.connect(distort);
+// distort.connect(context.destination);
+
+// gain.gain.value = 1;
+// distort.curve = makeDistortionCurve(0);
+
+// let range = document.getElementById('#distortion');
+// range.addEventListener('input', function(){
+//   console.log(range.value);
+//   let value = parseInt(this.value) * 5;
+//   distort.curve = makeDistortionCurve(value);
+// });
+
+
+// // http://stackoverflow.com/a/22313408/1090298
+// function makeDistortionCurve( amount ) {
+//   var k = typeof amount === 'number' ? amount : 0,
+//     n_samples = 44100,
+//     curve = new Float32Array(n_samples),
+//     deg = Math.PI / 180,
+//     i = 0,
+//     x;
+//   for ( ; i < n_samples; ++i ) {
+//     x = i * 2 / n_samples - 1;
+//     curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+//   }
+//   return curve;
+// };
 
 //waarecorder
 // let chunks = [];
@@ -91,6 +125,38 @@ function pluck(frequency){
 
     return bandpass;
 }
+// context.audioWorklet.addModule('pluckworklet.js').then(() => {
+//   let myNoise = new AudioWorkletNode(context,'pluck-processor',{parameterData:{frequency:0.1}});
+//   // Gain.oninput = function() {
+//   //   myNoise.parameters.get('gain').value=this.value
+//   //   GainLabel.innerHTML = this.value
+//   // }
+//   myNoise.connect(context.destination);
+// })
+
+
+// function applyBandpass(){
+//   // apply bandpass centred on target frequency to remove unwanted noise
+//     const bandpass = context.createBiquadFilter(); //stops it from lagging?
+//     bandpass.type = "bandpass";
+//     bandpass.frequency.value = frequency;
+//     bandpass.Q.value = 1;
+
+//     pluck.connect(bandpass);
+
+//     bandpass.connect(dst); /// magical almost fix 
+
+//     //disconnect 
+//     setTimeout(() => {
+//         pluck.disconnect();
+//     }, 2000);
+//     setTimeout(() => {
+//         bandpass.disconnect();
+//     }, 2000);
+
+
+//     return bandpass;
+// }
 
 
 function playNote(stringfret){
