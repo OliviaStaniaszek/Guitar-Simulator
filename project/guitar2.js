@@ -1,27 +1,37 @@
+let recorder;
 const context = new AudioContext();
-
+// let dst;
+// let dst = context.destination;
 let dampening = 0.99; //signal dampening amount
-
-let dist = context.createWaveShaper();
-dist.curve = makeDistortionCurve(30);
+const dst = context.destination;
 let bandpass = context.createBiquadFilter();
-let recorder = new Recorder(bandpass);
+
+// let dist = context.createWaveShaper();
+// dist.curve = makeDistortionCurve(30);
+// let output = new AudioNode();
+// let recorder;
 
 
-// http://stackoverflow.com/a/22313408/1090298
-function makeDistortionCurve( amount ) {
-    var k = typeof amount === 'number' ? amount : 0,
-      n_samples = 44100,
-      curve = new Float32Array(n_samples),
-      deg = Math.PI / 180,
-      i = 0,
-      x;
-    for ( ; i < n_samples; ++i ) {
-      x = i * 2 / n_samples - 1;
-      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-    }
-    return curve;
-  };
+//waarecorder
+// let chunks = [];
+// let dest = context.createMediaStreamDestination();
+// let mediaRecorder = new MediaRecorder(dest.stream);
+
+
+// // http://stackoverflow.com/a/22313408/1090298
+// function makeDistortionCurve( amount ) {
+//     var k = typeof amount === 'number' ? amount : 0,
+//       n_samples = 44100,
+//       curve = new Float32Array(n_samples),
+//       deg = Math.PI / 180,
+//       i = 0,
+//       x;
+//     for ( ; i < n_samples; ++i ) {
+//       x = i * 2 / n_samples - 1;
+//       curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+//     }
+//     return curve;
+//   };
 
 function pluck(frequency){
     const pluck = context.createScriptProcessor(4096, 0, 1);
@@ -61,17 +71,14 @@ function pluck(frequency){
     };
 
     //apply bandpass centred on target frequency to remove unwanted noise
-    const bandpass = context.createBiquadFilter();
+    const bandpass = context.createBiquadFilter(); //stops it from lagging?
     bandpass.type = "bandpass";
     bandpass.frequency.value = frequency;
     bandpass.Q.value = 1;
 
-    // const biquadFilter = context.createBiquadFilter({type:'lowpass', Q:-3.01});
-
-    //connect scriptprocessornode to biquad 
-    // pluck.connect(biquadFilter);
-    // biquadFilter.connect(bandpass);
     pluck.connect(bandpass);
+
+    bandpass.connect(dst); /// magical almost fix 
 
     //disconnect 
     setTimeout(() => {
@@ -81,45 +88,20 @@ function pluck(frequency){
         bandpass.disconnect();
     }, 2000);
 
-    //return pluck
+
     return bandpass;
 }
 
 
-
-
-
-  // // Define the pluck function
-  // async function pluck(frequency) {
-  //   // Create the AudioWorkletNode
-  //   await context.audioWorklet.addModule('pluckworklet.js');
-  //   const pluckNode = new AudioWorkletNode(context, 'pluck-processor');
-  //   pluckNode.parameters.get('frequency').value = frequency;
-  //   pluckNode.connect(context.destination);
-  
-  //   // Apply bandpass filter
-  //   const bandpass = context.createBiquadFilter();
-  //   bandpass.type = 'bandpass';
-  //   bandpass.frequency.value = frequency;
-  //   bandpass.Q.value = 1;
-  //   pluckNode.connect(bandpass);
-  
-  //   // Disconnect after 2 seconds
-  //   setTimeout(() => {
-  //     pluckNode.disconnect();
-  //     bandpass.disconnect();
-  //   }, 2000);
-  
-  //   return bandpass;
-  // }
-
 function playNote(stringfret){
-    const dst = context.destination;
+    // dst = context.destination;
 
     let string = stringfret[0];
     let fret = stringfret[1];
     context.resume();
-    pluck(getFrequency(string, fret)).connect(dst);
+    pluck(getFrequency(string, fret)).connect(bandpass);
+    // bandpass.connect(dst);
+    // dst.connect(bandpass);
     
 }
 
@@ -139,11 +121,14 @@ function strum(fret, stringCount = 6, stagger = 25) {
   dampening = 0.99;
 
   // Connect our strings to the sink
-  const dst = context.destination;
+  // dst = context.destination;
   for (let index = 0; index < stringCount; index++) {
       if (Number.isFinite(fret[index])) {
           setTimeout(() => {
-              pluck(getFrequency(index, fret[index])).connect(dst);
+              pluck(getFrequency(index, fret[index])).connect(bandpass);
+              // bandpass.connect(dst);
+              // dst.connect(bandpass);
+              // dst.connect(bandpassGlobal);
           }, stagger * index);
       }
   }
@@ -153,17 +138,57 @@ function playChord(frets){
     context.resume().then(strum(frets));
 }
 
+// Recording
+recorder = new Recorder(bandpass); 
+
+Start.onclick = () => {
+  // console.log(bandpass);
+  context.resume()
+  recorder.record()
+}
+Stop.onclick = () => {
+  recorder.stop()
+  recorder.exportWAV(blob => document.querySelector("audio").src = URL.createObjectURL(blob) )
+}
 
 
 // recorder = new Recorder(bandpass);
-function stopRecording(){
-    recorder.stop();
-    recorder.exportWAV(blob => audio.src = URL.createObjectURL(blob))
-}
-function startRecording(){
-  context.resume();
-  recorder.record();
-}
+// recorder = new Recorder(bandpass); 
 
+// function stopRecording(){
+//     recorder.stop();
+//     recorder.exportWAV(blob => audio.src = URL.createObjectURL(blob))
+// }
+// function startRecording(){
+//   context.resume();
+//   recorder.record();
+// }
+
+// Start.onclick = () => {
+//   console.log("start recording");
+//   context.resume()
+//   recorder.record()
+// }
+// Stop.onclick = () => {
+//   recorder.stop()
+//   recorder.exportWAV(blob => document.querySelector("audio").src = URL.createObjectURL(blob) )
+// }
+
+// function startRecording(){
+//   mediaRecorder.start();
+// }
+// function stopRecording(){
+//   mediaRecorder.stop();
+// }
+// mediaRecorder.ondataavailable = (evt) => {
+//   // Push each chunk (blobs) in an array
+//   chunks.push(evt.data);
+// };
+
+// mediaRecorder.onstop = (evt) => {
+//   // Make blob out of our blobs, and open it.
+//   const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+//   document.querySelector("audio").src = URL.createObjectURL(blob);
+// };
 
 
