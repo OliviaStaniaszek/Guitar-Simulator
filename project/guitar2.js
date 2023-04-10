@@ -12,26 +12,40 @@ let bandpass = context.createBiquadFilter();
 // dist.curve = makeDistortionCurve(30);
 // let output = new AudioNode();
 
-//recorder
+//recorder - 8 loading and recording -> record an audio node -> mediarecorderexample.html 
 var chunks = [];
-// var context = new AudioContext()
-// var Tone = context.createOscillator()
 var Destination = context.createMediaStreamDestination();
 var Recording = new MediaRecorder(Destination.stream);
-// bandpass.connect(Destination);
 
 function Start() {
-  // Tone.start()
   Recording.start()
 }
 function Stop() {
   Recording.stop()
-  // Tone.stop()
 }
 Recording.ondataavailable = event => chunks.push(event.data)
 Recording.onstop = () => {
   audio.src = URL.createObjectURL(new Blob(chunks,{'type':'audio/ogg'}))
 }
+
+// load pre-recorded audio -> 8 loading and recording -> mediaelement -> simplemediaelement.html 
+file = new Audio('Bigmouth strikes again.mp3');
+let source = context.createMediaElementSource(file);
+source.connect(context.destination);
+function playBackingTrack() {
+  context.resume();
+  file.play();
+  source.connect(Destination);
+}
+function updateVolume() {
+  let vol = document.getElementById('Volume').value;
+  file.volume = vol;
+}
+
+
+// let source = context.createMediaElementSource(file)
+let gainNode = new GainNode(context,{gain:0.5})
+source.connect(gainNode).connect(context.destination)
 
 
 // http://stackoverflow.com/a/22313408/1090298
