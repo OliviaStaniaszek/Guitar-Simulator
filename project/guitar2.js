@@ -1,18 +1,14 @@
 const context = new AudioContext();
-
 let dampening = 0.99; //signal dampening amount
-
-// let dist = context.createWaveShaper();
-// dist.curve = makeDistortionCurve(30);
 
 const dst = context.destination;
 let bandpass = context.createBiquadFilter();
 
-// let dist = context.createWaveShaper();
-// dist.curve = makeDistortionCurve(30);
-// let output = new AudioNode();
+var bitCrusher = new WaveShaperNode(context)
 
-//recorder - 8 loading and recording -> record an audio node -> mediarecorderexample.html 
+
+
+// recorder - 8 loading and recording -> record an audio node -> mediarecorderexample.html 
 var chunks = [];
 var Destination = context.createMediaStreamDestination();
 var Recording = new MediaRecorder(Destination.stream);
@@ -35,33 +31,15 @@ source.connect(context.destination);
 function playBackingTrack() {
   context.resume();
   file.play();
-  source.connect(Destination);
+  source.connect(bitCrusher);
+  bitCrusher.connect(Destination);
+  // source.connect(Destination);
 }
 function updateVolume() {
   let vol = document.getElementById('Volume').value;
   file.volume = vol;
 }
 
-
-// let source = context.createMediaElementSource(file)
-let gainNode = new GainNode(context,{gain:0.5})
-source.connect(gainNode).connect(context.destination)
-
-
-// http://stackoverflow.com/a/22313408/1090298
-function makeDistortionCurve( amount ) {
-    var k = typeof amount === 'number' ? amount : 0,
-      n_samples = 44100,
-      curve = new Float32Array(n_samples),
-      deg = Math.PI / 180,
-      i = 0,
-      x;
-    for ( ; i < n_samples; ++i ) {
-      x = i * 2 / n_samples - 1;
-      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-    }
-    return curve;
-  };
 
 function pluck(frequency){
     const pluck = context.createScriptProcessor(4096, 0, 1);
@@ -108,12 +86,10 @@ function pluck(frequency){
 
     // const biquadFilter = context.createBiquadFilter({type:'lowpass', Q:-3.01});
 
-    //connect scriptprocessornode to biquad 
-    // pluck.connect(biquadFilter);
-    // biquadFilter.connect(bandpass);
     pluck.connect(bandpass);
-    bandpass.connect(dst); /// magical almost fix 
-    bandpass.connect(Destination);
+    bandpass.connect(bitCrusher);
+    bitCrusher.connect(dst);
+    // bandpass.connect(dst); /// magical almost fix 
 
 
     //disconnect 
