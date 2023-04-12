@@ -1,5 +1,11 @@
 *{
     font-family: 'Quicksand', sans-serif;
+    color: white;
+  }
+
+  body{
+    background-color: rgb(107, 25, 25);
+    padding: 1%;
   }
     ul {
       list-style-type: none;
@@ -46,19 +52,57 @@
 
     .markers{
       position: absolute;
-      top: 180px;
+      top: 195px;
+      /* left: 5px; */
     }
     
     .strings{
       position: absolute;
-      top: 69px;
+      top: 1.75%;
+      left: 1%;
       
     }
 
 #g{
-  background-color: red;
+  background-color: rgba(123, 123, 123, 0.775);
 }
 
 #g:hover{
-  background-color: darkred;
+  background-color: rgba(59, 59, 59, 0.496);
+}
+
+button {
+  background-color: silver;
+  color: black;
+  border: none;
+  padding: 1%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+button:hover {background-color: #e7e7e7;}
+
+.col{
+  width: 50%;
+  display: block;
+  float: left;
+}
+
+.guitar{
+  display: block;
+}
+
+.recorderbuttons{
+  display: inline;
+  position: relative;
+  top: -20px;
+}
+
+.chords button{
+  width: 35px;
 }

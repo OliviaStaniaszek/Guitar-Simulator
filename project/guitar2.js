@@ -25,7 +25,7 @@ Recording.onstop = () => {
 }
 
 // load pre-recorded audio -> 8 loading and recording -> mediaelement -> simplemediaelement.html 
-file = new Audio('Bigmouth strikes again.mp3');
+file = new Audio('Em g d c em g d em.mp3');
 let source = context.createMediaElementSource(file);
 source.connect(context.destination);
 function playBackingTrack() {
@@ -89,6 +89,7 @@ function pluck(frequency){
     pluck.connect(bandpass);
     bandpass.connect(bitCrusher);
     bitCrusher.connect(dst);
+    bitCrusher.connect(Destination);
     // bandpass.connect(dst); /// magical almost fix 
 
 
