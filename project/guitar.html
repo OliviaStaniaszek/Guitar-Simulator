@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guitar simulator</title>
     <script src="guitar2.js"></script>
-    <script src="recorder.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
@@ -13,20 +12,12 @@
 </head>
 
 <body>
-  <!-- <svg id="guitar" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-    <metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata>
-    <g class="layer">
-     <title>Layer 1</title>
-     <g fill="#000000" id="svg_1" transform="rotate(-156.578 638.759 276.795) translate(-1500 1800) scale(0.3 -0.3)">
-      <path d="m12156.52809,7603.62927c-45,-30 -58,-67 -35,-101c11,-18 25,-26 45,-26c16,0 34,-6 40,-14c12,-15 -22,-20 -209,-31l-95,-6l38,33c43,39 49,76 15,108c-40,37 -142,19 -168,-29c-26,-49 1,-101 53,-101c14,0 28,-4 31,-9c5,-7 -210,-32 -274,-31c-25,1 -25,1 9,29c62,51 33,121 -51,121c-77,0 -131,-53 -112,-108c7,-20 17,-28 39,-30c60,-7 44,-20 -32,-26c-43,-4 -103,-9 -133,-12l-55,-6l38,36c43,41 47,67 12,101c-29,30 -75,33 -124,7c-70,-35 -72,-123 -3,-130c68,-7 26,-19 -105,-29c-76,-7 -140,-9 -143,-7c-2,3 10,16 28,30c72,57 8,140 -88,114c-92,-25 -116,-140 -29,-140c16,0 29,-4 29,-8c0,-5 -56,-13 -125,-18c-69,-5 -125,-6 -125,-3c0,4 11,14 25,23c32,21 34,67 3,96c-33,31 -108,23 -148,-15c-36,-34 -38,-70 -8,-102l21,-23l-49,0c-42,0 -55,-5 -76,-27c-23,-25 -26,-39 -32,-130c-3,-56 -9,-108 -12,-117c-3,-8 -22,-20 -42,-27c-21,-6 -41,-15 -47,-19c-5,-4 -145,-63 -310,-130c-165,-67 -507,-207 -760,-310c-253,-103 -680,-278 -950,-388c-269,-110 -798,-326 -1175,-480c-1756,-717 -1772,-724 -1783,-713c-6,6 -18,11 -26,11c-31,0 -147,62 -184,98c-138,133 -135,352 9,575c83,129 148,175 352,257c115,45 200,102 218,145c10,25 13,67 11,152c-3,151 -18,186 -95,224c-193,96 -500,61 -875,-100c-319,-137 -437,-218 -792,-546c-385,-355 -516,-441 -753,-495c-303,-70 -436,-80 -1092,-84c-603,-4 -761,-19 -975,-88c-321,-103 -704,-386 -876,-648c-82,-124 -152,-326 -195,-563c-25,-134 -25,-445 -1,-592c25,-149 87,-386 136,-522c84,-234 156,-398 365,-831c75,-156 165,-345 199,-420c251,-546 602,-805 1127,-829c132,-6 316,8 438,33c345,71 797,353 1080,674c41,47 119,153 174,235c122,183 187,266 293,370c197,193 450,327 727,385c143,30 257,40 451,40c215,0 335,12 481,50c258,65 449,181 557,334c52,73 89,172 89,235c-1,86 -70,169 -166,197c-69,20 -94,16 -220,-31c-230,-86 -452,-43 -612,117c-140,140 -187,325 -119,470c46,99 85,133 246,210c304,145 353,175 383,234c10,20 59,46 228,121c118,52 233,103 255,113c22,10 191,86 375,168c184,82 670,299 1080,482c1346,601 1858,829 2415,1077c303,134 565,251 583,260c40,18 127,12 264,-17c103,-22 178,-53 209,-86c12,-13 27,-24 32,-24c5,0 204,135 442,300c238,165 443,300 454,300c12,0 65,-39 122,-89c136,-119 185,-146 269,-146c73,0 119,16 222,76c84,49 130,94 165,162c23,44 28,64 28,132c0,106 -31,170 -132,276c-102,106 -125,115 -288,103c-69,-5 -125,-7 -125,-4c0,4 18,25 40,47c36,38 39,44 29,71c-19,54 -92,68 -150,29z" fill="#7f0000" id="svg_2"/>
-     </g>
-    </g>
-   </svg> -->
   
   <h1>Guitar Simulator</h1>
   <div class="guitar">
     <ul>    
       <!-- high E string -->
+      <!-- playNote([string,fret]) -->
       <li onclick="playNote([5,0])" >e </li>
       <li onclick="playNote([5,1])" ></li>
       <li onclick="playNote([5,2])" ></li>
@@ -209,7 +200,6 @@
 
   <div class="col">
     <div>
-      <!-- <audio controls id='file' src='beat1.mp3'></audio><br> -->
       <h3>Backing track</h3>
       <p>G major chord progression: Em G D C Em G D Em</p>
       <button id='play' onclick="playBackingTrack()">Play</button>
@@ -239,12 +229,10 @@
     
       <!-- <button onclick="mute()">Mute</button> -->
     </div>
-
   </div>
 
   <div class="col">
     <div>
-      <!-- recorder -->
       <h3>Record</h3>
       <div class="recorderbuttons">
         <button onclick='Start()'>Start</button>
@@ -252,17 +240,18 @@
       </div>
       <audio controls id='audio'></audio>
     </div>
+
     <div>
       <h3>Distortion</h3>
       <input type='range' min=0 max=4 value=0 step=1 id='nBits'><br>
     </div>
-    </body>
-
   </div>
+
+</body>
 </html>
 
 <script>
-// 12 waveshaper -> bitCrusher.html 
+// 12 waveshaper -> bitCrusher.html adds distortion
 nBits.oninput = () => {
   var x,nSamples = 65536,curve = new Float32Array(nSamples)
   var nLevels=Math.pow(2,nBits.value)
@@ -272,5 +261,6 @@ nBits.oninput = () => {
     curve[n] = (2*y+1)/nLevels-1
   }
   bitCrusher.curve=curve
-}</script>
+}
+</script>
 

@@ -4,24 +4,22 @@ let dampening = 0.99; //signal dampening amount
 const dst = context.destination;
 let bandpass = context.createBiquadFilter();
 
-var bitCrusher = new WaveShaperNode(context)
-
-
+let bitCrusher = new WaveShaperNode(context); //distortion
 
 // recorder - 8 loading and recording -> record an audio node -> mediarecorderexample.html 
-var chunks = [];
-var Destination = context.createMediaStreamDestination();
-var Recording = new MediaRecorder(Destination.stream);
+let chunks = [];
+let Destination = context.createMediaStreamDestination();
+let Recording = new MediaRecorder(Destination.stream);
 
 function Start() {
-  Recording.start()
+  Recording.start();
 }
 function Stop() {
-  Recording.stop()
+  Recording.stop();
 }
-Recording.ondataavailable = event => chunks.push(event.data)
+Recording.ondataavailable = event => chunks.push(event.data);
 Recording.onstop = () => {
-  audio.src = URL.createObjectURL(new Blob(chunks,{'type':'audio/ogg'}))
+  audio.src = URL.createObjectURL(new Blob(chunks,{'type':'audio/mp3'}));
 }
 
 // load pre-recorded audio -> 8 loading and recording -> mediaelement -> simplemediaelement.html 
@@ -33,14 +31,13 @@ function playBackingTrack() {
   file.play();
   source.connect(bitCrusher);
   bitCrusher.connect(Destination);
-  // source.connect(Destination);
 }
 function updateVolume() {
   let vol = document.getElementById('Volume').value;
   file.volume = vol;
 }
 
-
+// pluck, strum & getFrequency from https://codepen.io/johnslipper/pen/RwGZbmZ   
 function pluck(frequency){
     const pluck = context.createScriptProcessor(4096, 0, 1);
 
@@ -84,16 +81,12 @@ function pluck(frequency){
     bandpass.frequency.value = frequency;
     bandpass.Q.value = 1;
 
-    // const biquadFilter = context.createBiquadFilter({type:'lowpass', Q:-3.01});
-
     pluck.connect(bandpass);
     bandpass.connect(bitCrusher);
     bitCrusher.connect(dst);
-    bitCrusher.connect(Destination);
-    // bandpass.connect(dst); /// magical almost fix 
+    bitCrusher.connect(Destination); //recorder input
 
-
-    //disconnect 
+    //disconnect after 2 seconds
     setTimeout(() => {
         pluck.disconnect();
     }, 2000);
@@ -112,7 +105,6 @@ function playNote(stringfret){
     let fret = stringfret[1];
     context.resume();
     pluck(getFrequency(string, fret)).connect(dst);
-    
 }
 
 function getFrequency(string, fret){

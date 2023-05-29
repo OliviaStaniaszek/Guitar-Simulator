@@ -88,7 +88,7 @@ button {
 button:hover {background-color: #e7e7e7;}
 
 .col{
-  width: 50%;
+  width: 400px;
   display: block;
   float: left;
 }
